@@ -1,0 +1,13 @@
+apiVersion: multicluster.oracle.com/v1alpha1
+kind: MultiClusterComponent
+metadata:
+  name: {{ .Values.multiClusterComponent.name }}
+  namespace: {{ .Values.multiClusterComponent.namespace }}
+spec:
+  workloadType: {{ .Values.multiClusterComponent.spec.workloadType }}
+  template:
+    containers:
+    {{- range .Values.multiClusterComponent.spec.template.containers }}
+      - name: {{ .name }}
+        image: {{ .image }}
+    {{- end }}

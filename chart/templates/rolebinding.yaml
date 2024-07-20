@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Values.roleBinding.name }}
+  namespace: {{ .Values.roleBinding.namespace }}
+subjects:
+{{- toYaml .Values.roleBinding.subjects | nindent 2 }}
+roleRef:
+  {{- toYaml .Values.roleBinding.roleRef | nindent 2 }}

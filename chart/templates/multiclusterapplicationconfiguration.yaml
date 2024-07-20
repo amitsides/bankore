@@ -1,0 +1,9 @@
+apiVersion: multicluster.oracle.com/v1alpha1
+kind: MultiClusterApplicationConfiguration
+metadata:
+  name: {{ .Values.multiClusterAppConfig.name }}
+  namespace: {{ .Values.multiClusterAppConfig.namespace }}
+spec:
+  selector:
+    matchLabels:
+      {{- toYaml .Values.multiClusterAppConfig.spec.selector.matchLabels | nindent 6 }}

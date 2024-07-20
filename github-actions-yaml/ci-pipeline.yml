@@ -1,0 +1,42 @@
+name: Build and Push Docker Image to OCIR
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-22.04
+    env:
+      OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+      OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+      OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+      OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+      OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Get or create an OCIR Repository
+        id: get-ocir-repository
+        uses: oracle-actions/get-ocir-repository@v1.3.0
+        with:
+          name: oraclelinux
+          compartment: ${{ secrets.OCI_COMPARTMENT_OCID }}
+
+      - name: Log into OCIR
+        id: login-ocir
+        uses: oracle-actions/login-ocir@v1.3.0
+        with:
+          auth_token: ${{ secrets.OCI_AUTH_TOKEN }}
+
+      - name: Build and push Docker image
+        id: tag-and-push-image
+        run: |
+          docker build -t oraclelinux:8-slim .
+          docker tag "oraclelinux:8-slim" "${{ steps.get-ocir-repository.outputs.repo_path }}:8-slim"
+          docker push "${{ steps.get-ocir-repository.outputs.repo_path }}:8-slim"

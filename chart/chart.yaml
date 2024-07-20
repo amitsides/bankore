@@ -1,0 +1,5 @@
+apiVersion: v2
+name: bankore-multi-cluster
+description: A Helm chart for deploying MultiClusterComponent, MultiClusterApplicationConfigurations, and RoleBindings to OKE
+version: 0.1.0
+appVersion: "1.0.0"

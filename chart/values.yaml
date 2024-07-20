@@ -1,0 +1,29 @@
+multiClusterComponent:
+  name: my-multicluster-component
+  namespace: default
+  spec:
+    workloadType: Deployment
+    template:
+      containers:
+        - name: my-container
+          image: nginx:latest
+
+multiClusterAppConfig:
+  name: my-multicluster-appconfig
+  namespace: default
+  spec:
+    selector:
+      matchLabels:
+        app: my-app
+
+roleBinding:
+  name: my-rolebinding
+  namespace: default
+  subjects:
+    - kind: ServiceAccount
+      name: default
+      namespace: default
+  roleRef:
+    kind: Role
+    name: my-role
+    apiGroup: rbac.authorization.k8s.io
